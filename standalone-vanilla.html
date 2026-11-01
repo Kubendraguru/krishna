@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distill — Built for people. Read by machines.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #EEF0F2;
+      --ink: #0F1115;
+      --body: #2A2E35;
+      --muted: #8B9098;
+      --code: #7A7F88;
+      --comment: #B3B8BF;
+      --hot: #FF5A1F;
+      --hot-soft: #FFE1D3;
+      --cw: 46vw;
+      --ch: 52vh;
+      --gap: 4.75vw;
+      --top: 40.2vh;
+      --sans: "Inter", system-ui, -apple-system, sans-serif;
+      --serif: "Newsreader", Georgia, serif;
+      --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      height: 100svh;
+    }
+
+    /* ─── NAV BAR ─── */
+    .nav {
+      height: 56px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 56px;
+      position: relative;
+      z-index: 30;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .nav-logo svg {
+      width: 19px;
+      height: 23px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo span {
+      font-weight: 600;
+      font-size: 23px;
+      letter-spacing: -0.035em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 38px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--body);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+    }
+
+    .nav-links a svg {
+      opacity: 0.7;
+      width: 8px;
+      height: 5px;
+    }
+
+    .nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .nav-right .btn-signin {
+      color: var(--body);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-right .btn-signin:hover {
+      color: var(--ink);
+    }
+
+    .nav-right .btn-trial {
+      height: 32px;
+      padding: 0 17px;
+      border: 1px solid #C4C9CF;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      color: var(--body);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .nav-right .btn-trial:hover {
+      background: rgba(255, 255, 255, 0.65);
+      border-color: #A9B0B8;
+    }
+
+    .nav-right .btn-demo {
+      height: 32px;
+      padding: 0 17px;
+      background: var(--hot);
+      color: #FFF;
+      border-radius: 999px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: filter 0.2s, transform 0.2s;
+    }
+
+    .nav-right .btn-demo:hover {
+      filter: brightness(1.06);
+    }
+
+    /* ─── HERO COPY ─── */
+    .hero {
+      padding: 30px 8.9vw 0;
+      display: grid;
+      grid-template-columns: 1fr 34vw;
+      gap: 4vw;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--body);
+    }
+
+    .hero-headline {
+      margin-top: 14px;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(30px, 3vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+    }
+
+    .hero-headline em {
+      font-style: italic;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-para {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: clamp(14px, 1.05vw, 19px);
+      line-height: 1.55;
+      color: var(--body);
+      max-width: 34vw;
+    }
+
+    .hero-btn {
+      margin-top: 20px;
+      height: 40px;
+      padding: 0 22px;
+      background: var(--hot);
+      color: #FFF;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 13px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(255, 90, 31, 0.2);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(255, 90, 31, 0.35);
+    }
+
+    /* ─── THE CONVEYOR BELT ─── */
+    .belt {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      top: calc(var(--top) - 70px);
+      height: calc(var(--ch) + 140px);
+      cursor: grab;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 5;
+    }
+
+    .belt.is-dragging {
+      cursor: grabbing;
+    }
+
+    .belt-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .codes {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24vw);
+      mask-image: linear-gradient(90deg, transparent 0, #000 24vw);
+      z-index: 1;
+    }
+
+    .cards {
+      z-index: 2;
+    }
+
+    canvas.fx {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* ─── SCANNER LINE & BADGE ─── */
+    .scan {
+      position: absolute;
+      left: 50%;
+      top: calc(var(--top) - 14px);
+      height: calc(var(--ch) + 40px);
+      width: 0;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .scan-core,
+    .scan i {
+      position: absolute;
+      top: 0;
+      left: -2px;
+      width: 4px;
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #ff7a3c 0%, #FF5A1F 12%, #FF5A1F 88%, #ff7a3c 100%);
+      box-shadow: 0 0 10px 2px rgba(255, 90, 31, 0.85), 0 0 34px 10px rgba(255, 90, 31, 0.38);
+    }
+
+    .scan-halo,
+    .scan b {
+      position: absolute;
+      left: 0;
+      top: 4%;
+      height: 92%;
+      width: 42px;
+      background: linear-gradient(90deg, rgba(255, 110, 50, 0.55) 0%, rgba(255, 110, 50, 0) 100%);
+      filter: blur(6px);
+      pointer-events: none;
+    }
+
+    .badge {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(var(--top) - 60px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      pointer-events: none;
+      z-index: 25;
+    }
+
+    .badge-label {
+      font-family: var(--sans);
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .badge-pill {
+      height: 26px;
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(255, 90, 31, 0.35);
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 12.5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .badge-num {
+      background: var(--hot);
+      color: #FFF;
+      padding: 0 11px 0 13px;
+      min-width: 8.2ch;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .badge-pct {
+      background: var(--hot-soft);
+      color: #D9430F;
+      font-size: 11px;
+      padding: 0 12px 0 10px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      white-space: nowrap;
+    }
+
+    /* ─── KESSLER CARD COMMON STYLES ─── */
+    .k-card {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      width: var(--cw);
+      height: var(--ch);
+      border-radius: 1.6vw;
+      overflow: hidden;
+      color: #FFF;
+      font-family: var(--sans);
+      will-change: transform, clip-path;
+      user-select: none;
+      -webkit-user-select: none;
+      container-type: inline-size;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .k-nav {
+      position: absolute;
+      top: 4cqw;
+      left: 4.4cqw;
+      right: 4.4cqw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .k-logo {
+      display: flex;
+      align-items: center;
+      gap: 1.3cqw;
+      font-size: 4.6cqw;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    .k-logo svg {
+      width: 5.4cqw;
+      height: 4.2cqw;
+    }
+
+    .k-menu {
+      display: flex;
+      align-items: center;
+      gap: 3.4cqw;
+      font-size: 1.32cqw;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      opacity: 0.85;
+      text-transform: uppercase;
+    }
+
+    .k-pill {
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 999px;
+      padding: 0.7cqw 1.6cqw;
+      margin: -0.7cqw -1.6cqw;
+    }
+
+    /* Card 1: Home */
+    #card-home {
+      background-image: linear-gradient(180deg, rgba(20, 10, 4, 0.25) 0%, transparent 30%, rgba(20, 10, 4, 0.55) 100%),
+                        url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0e201fcd-ffc0-46a0-bd06-faa07bf0e84b.webp');
+    }
+
+    .home-bottom {
+      position: absolute;
+      bottom: 4.4cqw;
+      left: 4.4cqw;
+      right: 4.4cqw;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .home-stats {
+      display: flex;
+      align-items: flex-end;
+      gap: 4cqw;
+    }
+
+    .home-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .home-stat-num {
+      font-weight: 300;
+      font-size: 9cqw;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+
+    .home-stat-label {
+      font-size: 1.9cqw;
+      opacity: 0.85;
+      margin-top: 0.6cqw;
+    }
+
+    .home-stats-rule {
+      width: 1px;
+      height: 9cqw;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .home-tagline {
+      font-size: 2.2cqw;
+      width: 24cqw;
+      line-height: 1.25;
+      opacity: 0.9;
+    }
+
+    /* Card 2: Price */
+    #card-price {
+      background: radial-gradient(120% 90% at 20% 110%, #FF6A1F 0%, #FF9A4A 35%, #F7C79A 62%, #EFD9C4 100%);
+      color: #2A1406;
+    }
+
+    #card-price .k-menu .k-pill {
+      border-color: rgba(42, 20, 6, 0.4);
+    }
+
+    .price-num {
+      position: absolute;
+      top: 38%;
+      left: 4.4cqw;
+      font-weight: 300;
+      font-size: 13cqw;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+    }
+
+    .price-num sup {
+      font-size: 0.4em;
+      vertical-align: 0.4em;
+      font-weight: 400;
+    }
+
+    .price-sub {
+      position: absolute;
+      top: 62%;
+      left: 4.4cqw;
+      font-family: var(--mono);
+      font-size: 1.6cqw;
+      opacity: 0.75;
+      letter-spacing: 0.08em;
+    }
+
+    .price-plans {
+      position: absolute;
+      top: 38%;
+      right: 4.4cqw;
+      width: 36cqw;
+    }
+
+    .price-plan-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(42, 20, 6, 0.25);
+      padding: 1.2cqw 0;
+      font-size: 1.8cqw;
+      font-weight: 500;
+    }
+
+    .price-pilot-pill {
+      position: absolute;
+      bottom: 4.4cqw;
+      left: 4.4cqw;
+      background: #2A1406;
+      color: #F7E6D6;
+      border-radius: 999px;
+      padding: 1cqw 2.4cqw;
+      font-size: 1.8cqw;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    /* Card 3: Case Study */
+    #card-case {
+      position: absolute;
+    }
+
+    .case-bg {
+      position: absolute;
+      inset: -5%;
+      background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/2bebad68-8177-446a-9550-d64074166364.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(1.4cqw) saturate(1.1);
+      transform: scale(1.12);
+      z-index: 1;
+    }
+
+    .case-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(25, 14, 8, 0.15) 0%, rgba(25, 14, 8, 0.55) 100%);
+      z-index: 2;
+    }
+
+    .case-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+    }
+
+    .case-kicker {
+      position: absolute;
+      top: 17%;
+      left: 4.4cqw;
+      font-family: var(--mono);
+      font-size: 1.4cqw;
+      letter-spacing: 0.1em;
+      opacity: 0.85;
+    }
+
+    .case-title {
+      position: absolute;
+      top: 24%;
+      left: 4.4cqw;
+      width: 56cqw;
+      font-family: var(--serif);
+      font-size: 4.6cqw;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .case-stats {
+      position: absolute;
+      bottom: 4.4cqw;
+      left: 4.4cqw;
+      right: 4.4cqw;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3cqw;
+    }
+
+    .case-col {
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      padding-top: 1.2cqw;
+    }
+
+    .case-num {
+      font-weight: 300;
+      font-size: 6cqw;
+      line-height: 1;
+    }
+
+    .case-lbl {
+      font-size: 1.6cqw;
+      opacity: 0.8;
+      margin-top: 0.4cqw;
+    }
+
+    /* Card 4: Vision */
+    #card-vision {
+      background: #1B1311;
+    }
+
+    .vision-tiles {
+      position: absolute;
+      top: 21%;
+      height: 46%;
+      left: 4.4cqw;
+      right: 4.4cqw;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 2cqw;
+    }
+
+    .vision-tile {
+      border-radius: 1.4cqw;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .vision-tile-1 {
+      background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/e80ba08d-d7b6-4b27-b0cd-8d0ad09c788c.webp');
+    }
+
+    .vision-tile-2 {
+      background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/62b0d7c1-3eb7-44bd-9b19-57b975fb250f.webp');
+    }
+
+    .vision-quote {
+      font-family: var(--serif);
+      font-size: 3.4cqw;
+      line-height: 1.15;
+      display: flex;
+      align-items: center;
+      padding-left: 0.8cqw;
+    }
+
+    .vision-quote em {
+      opacity: 0.75;
+      font-style: italic;
+    }
+
+    .vision-footer {
+      position: absolute;
+      bottom: 4.4cqw;
+      left: 4.4cqw;
+      right: 4.4cqw;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 1.6cqw;
+      opacity: 0.7;
+      line-height: 1.35;
+    }
+
+    /* Card 5: Alloy */
+    #card-alloy {
+      background: #140C08;
+    }
+
+    .alloy-bg {
+      position: absolute;
+      inset: -3%;
+      background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/156ff74d-ee37-4443-8f3a-11ae2095ed4c.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(0.6cqw);
+      transform: scale(1.06);
+      z-index: 1;
+    }
+
+    .alloy-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(20, 12, 8, 0.1) 40%, rgba(20, 12, 8, 0.75) 100%);
+      z-index: 2;
+    }
+
+    .alloy-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+    }
+
+    .alloy-title {
+      position: absolute;
+      bottom: 4.4cqw;
+      left: 4.4cqw;
+      font-family: var(--serif);
+      font-size: 7.4cqw;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+
+    .alloy-title em {
+      font-style: italic;
+    }
+
+    .alloy-specs {
+      position: absolute;
+      bottom: 4.4cqw;
+      right: 4.4cqw;
+      width: 30cqw;
+    }
+
+    .alloy-spec-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.8cqw 0;
+      font-size: 1.6cqw;
+      display: flex;
+      justify-content: space-between;
+      opacity: 0.9;
+    }
+
+    /* Card 6: Journal */
+    #card-journal {
+      background: #E9ECF1;
+      color: #121A2A;
+    }
+
+    #card-journal .k-menu {
+      opacity: 0.7;
+    }
+
+    #card-journal .k-menu .k-pill {
+      border-color: rgba(18, 26, 42, 0.35);
+    }
+
+    .journal-header {
+      position: absolute;
+      top: 23%;
+      left: 4.4cqw;
+      font-family: var(--serif);
+      font-size: 5.6cqw;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .journal-header span {
+      display: block;
+      font-style: italic;
+      color: #46618E;
+    }
+
+    .journal-posts {
+      position: absolute;
+      bottom: 4.4cqw;
+      left: 4.4cqw;
+      right: 4.4cqw;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 2cqw;
+    }
+
+    .journal-post {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .journal-thumb {
+      aspect-ratio: 4 / 3;
+      border-radius: 1.2cqw;
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+    }
+
+    .journal-kicker {
+      font-family: var(--mono);
+      font-size: 1.2cqw;
+      color: #6A7891;
+      margin: 1cqw 0 0.4cqw;
+      letter-spacing: 0.05em;
+    }
+
+    .journal-post-title {
+      font-size: 1.5cqw;
+      font-weight: 500;
+      line-height: 1.2;
+      color: #121A2A;
+    }
+
+    /* ─── CODE LAYER ─── */
+    .code {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      width: var(--cw);
+      height: var(--ch);
+      white-space: pre;
+      overflow: hidden;
+      pointer-events: none;
+      container-type: inline-size;
+      will-change: transform, clip-path;
+    }
+
+    .code-html {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 1.56cqw;
+      line-height: 1.39;
+      color: var(--code);
+    }
+
+    .code-meta {
+      position: absolute;
+      top: 0;
+      left: 51%;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 1.56cqw;
+      line-height: 1.39;
+      color: var(--comment);
+    }
+
+    /* ─── RESPONSIVE (≤ 767px) ─── */
+    @media (max-width: 767px) {
+      :root {
+        --cw: 84vw;
+        --ch: 54vw;
+        --gap: 7vw;
+        --top: 54svh;
+      }
+
+      @media (max-height: 700px) {
+        :root {
+          --top: 58svh;
+        }
+      }
+
+      .nav {
+        padding: 0 16px;
+      }
+
+      .nav-links,
+      .nav-right .btn-signin,
+      .nav-right .btn-trial {
+        display: none;
+      }
+
+      .nav-right .btn-demo {
+        height: 30px;
+        padding: 0 13px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding: 18px 20px 0;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .hero-headline {
+        font-size: 34px;
+      }
+
+      .hero-para {
+        font-size: 14px;
+        max-width: none;
+      }
+
+      .hero-btn {
+        margin-top: 14px;
+      }
+
+      .codes {
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30vw);
+        mask-image: linear-gradient(90deg, transparent 0, #000 30vw);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <!-- NAV -->
+    <header class="nav">
+      <a href="#" class="nav-logo" aria-label="Distill Home">
+        <svg viewBox="0 0 19 23" fill="currentColor">
+          <path d="M 9.5 1.5 C 9.5 1.5 1.5 11.5 1.5 16 A 8 8 0 0 0 17.5 16 C 17.5 11.5 9.5 1.5 9.5 1.5 Z"/>
+          <path d="M 5.8 14.5 C 5.3 11.5 7.2 7.2 9.5 4" stroke="var(--bg)" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span>Distill</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#">
+          Product
+          <svg viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#">
+          Use cases
+          <svg viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#">
+          Resources
+          <svg viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#">Pricing</a>
+      </nav>
+
+      <div class="nav-right">
+        <a href="#" class="btn-signin">Sign in</a>
+        <a href="#" class="btn-trial">Start a free trial</a>
+        <a href="#" class="btn-demo">Book a demo</a>
+      </div>
+    </header>
+
+    <!-- HERO COPY -->
+    <main class="hero">
+      <div class="hero-left">
+        <div class="hero-eyebrow">AI READABILITY</div>
+        <h1 class="hero-headline">
+          Built for people.<br>
+          <em>Read by machines.</em>
+        </h1>
+      </div>
+      <div class="hero-right">
+        <p class="hero-para">
+          Distill detects AI agents at the edge and serves them a clean, token&#8209;light version of every page, without changing a pixel of what people see.
+        </p>
+        <a href="#" class="hero-btn">Explore Distill</a>
+      </div>
+    </main>
+
+    <!-- SCANNER & COUNTER -->
+    <div class="badge">
+      <span class="badge-label">Token reduction</span>
+      <div class="badge-pill">
+        <span class="badge-num" id="badge-num">−48,193</span>
+        <span class="badge-pct" id="badge-pct">91% less</span>
+      </div>
+    </div>
+
+    <div class="scan">
+      <b class="scan-halo"></b>
+      <i class="scan-core"></i>
+    </div>
+
+    <!-- THE BELT -->
+    <div class="belt" id="belt">
+      <!-- Layer 1: Code -->
+      <div class="belt-layer codes" id="codes-layer">
+        <!-- Home Code -->
+        <div class="code" id="code-0">
+          <div class="code-html">&lt;h1&gt;Kessler — Advanced materials&lt;/h1&gt;
+&lt;p&gt;
+  Advanced materials for a stronger
+  tomorrow. Ceramic-matrix alloys made
+  with desert sand and solar heat.
+&lt;/p&gt;
+&lt;h2&gt;At a glance&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Strength: 200x steel by weight&lt;/li&gt;
+  &lt;li&gt;Emissions: 87% lower&lt;/li&gt;
+  &lt;li&gt;Plants: Nevada, Atacama, Oman&lt;/li&gt;
+  &lt;li&gt;Founded: 2019&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Products&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;K-Alloy 7 — structural&lt;/li&gt;
+  &lt;li&gt;Basalt fibre — tensile&lt;/li&gt;
+  &lt;li&gt;Ceramic matrix — thermal&lt;/li&gt;
+&lt;/ul&gt;
+&lt;a href="/demo"&gt;Book a demo&lt;/a&gt;</div>
+          <div class="code-meta">&lt;!-- distilled: 6,140 tokens --&gt;
+&lt;!-- original: 70,411 tokens --&gt;
+&lt;!-- kessler.co/ --&gt;</div>
+        </div>
+
+        <!-- Price Code -->
+        <div class="code" id="code-1">
+          <div class="code-html">&lt;h1&gt;Kessler — Pricing&lt;/h1&gt;
+&lt;p&gt;
+  Three plans for every scale of
+  production. Start small, scale to
+  full foundry output.
+&lt;/p&gt;
+&lt;h2&gt;Pilot — $299 / mo&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Sample batches: 4 / mo&lt;/li&gt;
+  &lt;li&gt;Alloy grades: 2&lt;/li&gt;
+  &lt;li&gt;Support: email&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Industrial — $2,400 / mo&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Tonnage: up to 40 t / mo&lt;/li&gt;
+  &lt;li&gt;Alloy grades: all&lt;/li&gt;
+  &lt;li&gt;Certification: ISO 9001&lt;/li&gt;
+  &lt;li&gt;Support: dedicated engineer&lt;/li&gt;
+&lt;/ul&gt;</div>
+          <div class="code-meta">&lt;!-- distilled: 4,960 tokens --&gt;
+&lt;!-- original: 41,208 tokens --&gt;
+&lt;!-- kessler.co/pricing --&gt;</div>
+        </div>
+
+        <!-- Case Code -->
+        <div class="code" id="code-2">
+          <div class="code-html">&lt;h1&gt;Case study: Atlas Rail&lt;/h1&gt;
+&lt;p&gt;
+  How Atlas Rail cut track weight by
+  a third in eighteen months.
+&lt;/p&gt;
+&lt;h2&gt;The challenge&lt;/h2&gt;
+&lt;p&gt;
+  1,200 km of desert line, rails
+  warping above 50 °C every summer.
+&lt;/p&gt;
+&lt;h2&gt;The result&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;34% lighter track sections&lt;/li&gt;
+  &lt;li&gt;3.4x longer service life&lt;/li&gt;
+  &lt;li&gt;0 unplanned closures in 2025&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  "We stopped losing summers."
+  — Head of Infrastructure
+&lt;/p&gt;</div>
+          <div class="code-meta">&lt;!-- distilled: 6,300 tokens --&gt;
+&lt;!-- original: 98,432 tokens --&gt;
+&lt;!-- kessler.co/cases/atlas-rail --&gt;</div>
+        </div>
+
+        <!-- Vision Code -->
+        <div class="code" id="code-3">
+          <div class="code-html">&lt;article&gt;
+  &lt;h1&gt;The Kessler vision&lt;/h1&gt;
+  &lt;p&gt;
+    Materials that outlast the people
+    who made them.
+  &lt;/p&gt;
+  &lt;p&gt;
+    We build where the sun is
+    strongest and the sand is free:
+    three plants, one closed loop.
+  &lt;/p&gt;
+  &lt;h2&gt;Principles&lt;/h2&gt;
+  &lt;ol&gt;
+    &lt;li&gt;Heat from the sun, not gas&lt;/li&gt;
+    &lt;li&gt;Sand in, scrap back in&lt;/li&gt;
+    &lt;li&gt;Publish every number&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/article&gt;</div>
+          <div class="code-meta">&lt;!-- distilled: 8,215 tokens --&gt;
+&lt;!-- original: 55,870 tokens --&gt;
+&lt;!-- kessler.co/vision --&gt;</div>
+        </div>
+
+        <!-- Alloy Code -->
+        <div class="code" id="code-4">
+          <div class="code-html">&lt;h1&gt;K-Alloy 7&lt;/h1&gt;
+&lt;p&gt;The carbon-negative alloy.&lt;/p&gt;
+&lt;h2&gt;Specification&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Tensile strength: 1,940 MPa&lt;/li&gt;
+  &lt;li&gt;Density: 2.9 g/cm³&lt;/li&gt;
+  &lt;li&gt;Max service temp: 1,150 °C&lt;/li&gt;
+  &lt;li&gt;CO₂: −0.4 kg per kg made&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Uses&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Rail, bridges, turbine housings&lt;/li&gt;
+&lt;/ul&gt;
+&lt;a href="/k-alloy-7.pdf"&gt;Datasheet&lt;/a&gt;</div>
+          <div class="code-meta">&lt;!-- distilled: 5,512 tokens --&gt;
+&lt;!-- original: 63,904 tokens --&gt;
+&lt;!-- kessler.co/products/k-alloy-7 --&gt;</div>
+        </div>
+
+        <!-- Journal Code -->
+        <div class="code" id="code-5">
+          <div class="code-html">&lt;h1&gt;Kessler Journal&lt;/h1&gt;
+&lt;p&gt;Field notes from the flats.&lt;/p&gt;
+&lt;article&gt;
+  &lt;h2&gt;Mining nothing but light&lt;/h2&gt;
+  &lt;time&gt;2026-03-14&lt;/time&gt;
+&lt;/article&gt;
+&lt;article&gt;
+  &lt;h2&gt;Atacama, year one&lt;/h2&gt;
+  &lt;time&gt;2026-02-02&lt;/time&gt;
+&lt;/article&gt;
+&lt;article&gt;
+  &lt;h2&gt;Why we melt sand at noon&lt;/h2&gt;
+  &lt;time&gt;2026-01-09&lt;/time&gt;
+&lt;/article&gt;</div>
+          <div class="code-meta">&lt;!-- distilled: 7,602 tokens --&gt;
+&lt;!-- original: 47,316 tokens --&gt;
+&lt;!-- kessler.co/journal --&gt;</div>
+        </div>
+      </div>
+
+      <!-- Layer 2: Cards -->
+      <div class="belt-layer cards" id="cards-layer">
+        <!-- Card 1: Home -->
+        <div class="k-card" id="card-home">
+          <div class="k-nav">
+            <div class="k-logo">
+              <svg viewBox="0 0 54 42" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M6 39L24 7L38 39" />
+                <path d="M22 39L36 14L48 39" />
+              </svg>
+              <span>Kessler</span>
+            </div>
+            <div class="k-menu">
+              <span>PRODUCTS</span>
+              <span>IMPACT</span>
+              <span>ABOUT</span>
+            </div>
+          </div>
+          <div class="home-bottom">
+            <div class="home-stats">
+              <div class="home-stat">
+                <span class="home-stat-num">200x</span>
+                <span class="home-stat-label">stronger</span>
+              </div>
+              <div class="home-stats-rule"></div>
+              <div class="home-stat">
+                <span class="home-stat-num">87%</span>
+                <span class="home-stat-label">lower emissions</span>
+              </div>
+            </div>
+            <div class="home-tagline">
+              Advanced materials for a stronger tomorrow.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Price -->
+        <div class="k-card" id="card-price">
+          <div class="k-nav">
+            <div class="k-logo">
+              <svg viewBox="0 0 54 42" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M6 39L24 7L38 39" />
+                <path d="M22 39L36 14L48 39" />
+              </svg>
+              <span>Kessler</span>
+            </div>
+            <div class="k-menu">
+              <span>PRODUCTS</span>
+              <span class="k-pill">PRICING</span>
+              <span>CONTACT</span>
+            </div>
+          </div>
+          <div class="price-num">
+            <sup>$</sup>2,400
+          </div>
+          <div class="price-sub">
+            PER MONTH · INDUSTRIAL
+          </div>
+          <div class="price-plans">
+            <div class="price-plan-row">
+              <span>Pilot</span>
+              <span>$299</span>
+            </div>
+            <div class="price-plan-row">
+              <span>Industrial</span>
+              <span>$2,400</span>
+            </div>
+            <div class="price-plan-row">
+              <span>Foundry</span>
+              <span>Custom</span>
+            </div>
+          </div>
+          <a href="#" class="price-pilot-pill">Start a pilot</a>
+        </div>
+
+        <!-- Card 3: Case Study -->
+        <div class="k-card" id="card-case">
+          <div class="case-bg"></div>
+          <div class="case-overlay"></div>
+          <div class="case-content">
+            <div class="k-nav">
+              <div class="k-logo">
+                <svg viewBox="0 0 54 42" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+                  <path d="M6 39L24 7L38 39" />
+                  <path d="M22 39L36 14L48 39" />
+                </svg>
+                <span>Kessler</span>
+              </div>
+              <div class="k-menu">
+                <span>PRODUCTS</span>
+                <span>IMPACT</span>
+                <span>ABOUT</span>
+              </div>
+            </div>
+            <div class="case-kicker">CASE STUDY · ATLAS RAIL</div>
+            <h2 class="case-title">How Atlas Rail cut track weight by a third in eighteen months</h2>
+            <div class="case-stats">
+              <div class="case-col">
+                <div class="case-num">34%</div>
+                <div class="case-lbl">lighter track</div>
+              </div>
+              <div class="case-col">
+                <div class="case-num">3.4x</div>
+                <div class="case-lbl">service life</div>
+              </div>
+              <div class="case-col">
+                <div class="case-num">0</div>
+                <div class="case-lbl">unplanned closures</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Vision -->
+        <div class="k-card" id="card-vision">
+          <div class="k-nav">
+            <div class="k-logo">
+              <svg viewBox="0 0 54 42" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M6 39L24 7L38 39" />
+                <path d="M22 39L36 14L48 39" />
+              </svg>
+              <span>Kessler</span>
+            </div>
+            <div class="k-menu">
+              <span>PRODUCTS</span>
+              <span class="k-pill">VISION</span>
+              <span>ABOUT</span>
+            </div>
+          </div>
+          <div class="vision-tiles">
+            <div class="vision-tile vision-tile-1"></div>
+            <div class="vision-tile vision-tile-2"></div>
+            <div class="vision-quote">
+              The Kessler vision: <em>materials that outlast the people who made them.</em>
+            </div>
+          </div>
+          <div class="vision-footer">
+            <div>How Kessler pours alloy<br>at the edge of the desert</div>
+            <div>Manifesto · 6 min</div>
+          </div>
+        </div>
+
+        <!-- Card 5: Alloy -->
+        <div class="k-card" id="card-alloy">
+          <div class="alloy-bg"></div>
+          <div class="alloy-overlay"></div>
+          <div class="alloy-content">
+            <div class="k-nav">
+              <div class="k-logo">
+                <svg viewBox="0 0 54 42" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+                  <path d="M6 39L24 7L38 39" />
+                  <path d="M22 39L36 14L48 39" />
+                </svg>
+                <span>Kessler</span>
+              </div>
+              <div class="k-menu">
+                <span>PRODUCTS</span>
+                <span>IMPACT</span>
+                <span>ABOUT</span>
+              </div>
+            </div>
+            <div class="alloy-title">
+              The carbon‑negative<br>
+              <em>alloy.</em>
+            </div>
+            <div class="alloy-specs">
+              <div class="alloy-spec-row">
+                <span>Product</span>
+                <span>K-Alloy 7</span>
+              </div>
+              <div class="alloy-spec-row">
+                <span>Tensile</span>
+                <span>1,940 MPa</span>
+              </div>
+              <div class="alloy-spec-row">
+                <span>Datasheet</span>
+                <span>PDF ↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Journal -->
+        <div class="k-card" id="card-journal">
+          <div class="k-nav">
+            <div class="k-logo">
+              <svg viewBox="0 0 54 42" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M6 39L24 7L38 39" />
+                <path d="M22 39L36 14L48 39" />
+              </svg>
+              <span>Kessler</span>
+            </div>
+            <div class="k-menu">
+              <span>PRODUCTS</span>
+              <span class="k-pill">JOURNAL</span>
+              <span>ABOUT</span>
+            </div>
+          </div>
+          <div class="journal-header">
+            Journal
+            <span>field notes from the flats</span>
+          </div>
+          <div class="journal-posts">
+            <div class="journal-post">
+              <div class="journal-thumb" style="background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/7b6ad638-89ec-4dec-be74-d36fbff3ea53.webp');"></div>
+              <div class="journal-kicker">FIELD NOTES</div>
+              <div class="journal-post-title">Mining nothing but light on the salt flats</div>
+            </div>
+            <div class="journal-post">
+              <div class="journal-thumb" style="background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/62b0d7c1-3eb7-44bd-9b19-57b975fb250f.webp');"></div>
+              <div class="journal-kicker">PLANTS</div>
+              <div class="journal-post-title">Atacama, year one</div>
+            </div>
+            <div class="journal-post">
+              <div class="journal-thumb" style="background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0e201fcd-ffc0-46a0-bd06-faa07bf0e84b.webp');"></div>
+              <div class="journal-kicker">PROCESS</div>
+              <div class="journal-post-title">Why we melt sand at noon</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 3: FX Canvas -->
+      <canvas class="fx" id="fx-canvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ─── CARD DATA ───
+      const CARD_DATA = [
+        { id: 'home', original: 70411, distilled: 6140, saved: 64271, pct: '91%', url: 'kessler.co/' },
+        { id: 'price', original: 41208, distilled: 4960, saved: 36248, pct: '88%', url: 'kessler.co/pricing' },
+        { id: 'case', original: 98432, distilled: 6300, saved: 92132, pct: '94%', url: 'kessler.co/cases/atlas-rail' },
+        { id: 'vision', original: 55870, distilled: 8215, saved: 47655, pct: '85%', url: 'kessler.co/vision' },
+        { id: 'alloy', original: 63904, distilled: 5512, saved: 58392, pct: '91%', url: 'kessler.co/products/k-alloy-7' },
+        { id: 'journal', original: 47316, distilled: 7602, saved: 39714, pct: '84%', url: 'kessler.co/journal' }
+      ];
+
+      const NUM_CARDS = CARD_DATA.length;
+      const PALETTE = ['#FF4A12', '#FF5A1F', '#FF6B2C', '#FF8A3D', '#FFB06A', '#FFD9B5', '#FFF3E6'];
+
+      // ─── DOM ELEMENTS ───
+      const belt = document.getElementById('belt');
+      const canvas = document.getElementById('fx-canvas');
+      const ctx = canvas.getContext('2d');
+      const badgeNum = document.getElementById('badge-num');
+      const badgePct = document.getElementById('badge-pct');
+
+      const cardEls = [
+        document.getElementById('card-home'),
+        document.getElementById('card-price'),
+        document.getElementById('card-case'),
+        document.getElementById('card-vision'),
+        document.getElementById('card-alloy'),
+        document.getElementById('card-journal')
+      ];
+
+      const codeEls = [
+        document.getElementById('code-0'),
+        document.getElementById('code-1'),
+        document.getElementById('code-2'),
+        document.getElementById('code-3'),
+        document.getElementById('code-4'),
+        document.getElementById('code-5')
+      ];
+
+      // ─── 32-BIT INTEGER HASH ───
+      function hash3(a, b, c) {
+        let h = (Math.imul(a, 374761393) + Math.imul(b, 668265263) + Math.imul(c, 2147483647)) | 0;
+        h = Math.imul(h ^ (h >>> 13), 1274126177) | 0;
+        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+      }
+
+      // ─── GEOMETRY & STATE ───
+      let cw = 0;
+      let ch = 0;
+      let gap = 0;
+      let span = 0;
+      let period = 0;
+      let Lx = 0;
+      let dpr = 1;
+      let beltTop = 0;
+      const cardTop = 70; // top offset of cards within belt
+
+      let off = 0;
+      let vel = 0;
+      let hover = 0;
+      let hoverTarget = 0;
+      let isDragging = false;
+      let lastPointerX = 0;
+      let lastPointerTime = 0;
+      let dragVelocity = 0;
+      let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Sparks
+      const sparks = [];
+
+      // Counter interpolation
+      let displayedCounter = 48193;
+      let activeCardIndex = 0;
+
+      function updateGeometry() {
+        const W = window.innerWidth;
+        Lx = W / 2;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        // Measure from first card
+        const rect = cardEls[0].getBoundingClientRect();
+        cw = rect.width;
+        ch = rect.height;
+
+        // Gap calculation from CSS --gap (vw)
+        const isMobile = window.innerWidth <= 767;
+        const gapVw = isMobile ? 7 : 4.75;
+        gap = (gapVw / 100) * W;
+
+        span = cw + gap;
+        period = span * NUM_CARDS;
+
+        // Canvas sizing
+        const beltRect = belt.getBoundingClientRect();
+        beltTop = beltRect.top;
+        canvas.width = Math.round(beltRect.width * dpr);
+        canvas.height = Math.round(beltRect.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      }
+
+      // Initialize offset on load
+      updateGeometry();
+      off = window.innerWidth / 2 - 0.62 * cw;
+
+      window.addEventListener('resize', () => {
+        updateGeometry();
+      });
+
+      // ─── HOVER HANDLING ───
+      belt.addEventListener('pointerenter', () => {
+        hoverTarget = 1;
+      });
+
+      belt.addEventListener('pointerleave', () => {
+        hoverTarget = 0;
+      });
+
+      // ─── DRAG & WHEEL HANDLING ───
+      belt.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        lastPointerX = e.clientX;
+        lastPointerTime = performance.now();
+        dragVelocity = 0;
+        belt.setPointerCapture(e.pointerId);
+        belt.classList.add('is-dragging');
+      });
+
+      belt.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const now = performance.now();
+        const dt = Math.max(0.008, (now - lastPointerTime) / 1000);
+        const dx = e.clientX - lastPointerX;
+
+        off += dx;
+        dragVelocity = (dx / dt) * 0.8 + dragVelocity * 0.2;
+
+        lastPointerX = e.clientX;
+        lastPointerTime = now;
+      });
+
+      function stopDragging() {
+        if (!isDragging) return;
+        isDragging = false;
+        vel = dragVelocity;
+        belt.classList.remove('is-dragging');
+      }
+
+      belt.addEventListener('pointerup', stopDragging);
+      belt.addEventListener('pointercancel', stopDragging);
+
+      belt.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+          e.preventDefault();
+          vel += -e.deltaX * 6;
+        }
+      }, { passive: false });
+
+      // ─── ANIMATION LOOP ───
+      let lastTime = performance.now();
+
+      function tick(now) {
+        const dt = Math.min((now - lastTime) / 1000, 0.1);
+        lastTime = now;
+        const tSec = now / 1000;
+
+        // Auto speed
+        const autoSpeed = prefersReducedMotion ? 0 : -0.075 * window.innerWidth;
+
+        // Hover easing (rate 4/s)
+        hover += (hoverTarget - hover) * (1 - Math.exp(-4 * dt));
+
+        // Target speed
+        const targetSpeed = autoSpeed * (1 - 0.65 * hover);
+
+        // Velocity & Position
+        if (!isDragging) {
+          vel += (targetSpeed - vel) * (1 - Math.exp(-2.2 * dt));
+          off += vel * dt;
+        }
+
+        // Clear FX Canvas
+        ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+
+        let crossingCardFound = false;
+        let crossingIndex = -1;
+        let crossingCut = 0;
+
+        // Update cards & code twin positions
+        for (let i = 0; i < NUM_CARDS; i++) {
+          const raw = off + i * span + span;
+          const x = ((((raw % period) + period) % period)) - span;
+
+          const card = cardEls[i];
+          const code = codeEls[i];
+
+          const cut = Math.min(Math.max(Lx - x, 0), cw);
+
+          // Card transform & clipping
+          card.style.transform = `translate3d(${x}px, 0, 0)`;
+
+          if (cut > 0) {
+            card.style.clipPath = `inset(0 0 0 ${cut}px round 0 1.6vw 1.6vw 0)`;
+            const maskGrad = `linear-gradient(90deg, transparent ${cut}px, #000 ${cut + 26}px)`;
+            card.style.webkitMaskImage = maskGrad;
+            card.style.maskImage = maskGrad;
+          } else {
+            card.style.clipPath = 'none';
+            card.style.webkitMaskImage = 'none';
+            card.style.maskImage = 'none';
+          }
+
+          // Code transform & clipping
+          code.style.transform = `translate3d(${x}px, 0, 0)`;
+          code.style.clipPath = `inset(0 ${cw - cut}px 0 0)`;
+          code.style.visibility = cut === 0 ? 'hidden' : 'visible';
+
+          // Check if this card is currently crossing the scanner line
+          if (cut > 0 && cut < cw) {
+            crossingCardFound = true;
+            crossingIndex = i;
+            crossingCut = cut;
+          }
+
+          // Draw Dissolve FX if card is intersecting the scanner line
+          if (cut > 0 && x + cw > Lx) {
+            drawCardDissolve(i, x, cut, tSec);
+          }
+        }
+
+        // Update Counter
+        if (crossingCardFound) {
+          const data = CARD_DATA[crossingIndex];
+          const progress = crossingCut / cw;
+          const targetCounter = Math.round((data.original - data.distilled) * progress);
+
+          if (activeCardIndex !== crossingIndex) {
+            activeCardIndex = crossingIndex;
+            badgePct.textContent = data.pct + ' less';
+            displayedCounter = targetCounter; // snaps on card change
+          } else {
+            displayedCounter += (targetCounter - displayedCounter) * Math.min(1, dt * 14);
+          }
+
+          badgeNum.textContent = '−' + Math.round(displayedCounter).toLocaleString('en-US');
+        }
+
+        // Draw and update free sparks
+        drawSparks(dt);
+
+        requestAnimationFrame(tick);
+      }
+
+      // ─── DISSOLVE FX (HAZE & PARTICLES) ───
+      function drawCardDissolve(cardIndex, x, cut, tSec) {
+        // 1. Haze
+        const hazeWidth = Math.min(150, x + cw - Lx);
+        if (hazeWidth > 0) {
+          const hazeGrad = ctx.createLinearGradient(Lx, 0, Lx + 150, 0);
+          hazeGrad.addColorStop(0, 'rgba(255, 96, 40, 0.42)');
+          hazeGrad.addColorStop(1, 'rgba(255, 96, 40, 0)');
+          ctx.fillStyle = hazeGrad;
+          ctx.fillRect(Lx, cardTop, hazeWidth, ch);
+        }
+
+        // 2. Dithered particles fixed to the card surface
+        const R = 0.3 * cw;
+        const startGx = Math.max(0, Math.floor((Lx - x) / 3));
+        const endGx = Math.min(Math.floor(cw / 3), Math.floor((Lx - x + R) / 3));
+        const totalRows = Math.floor(ch / 3);
+
+        const twinkleTime = Math.floor(tSec * 9) + 97;
+
+        for (let gx = startGx; gx <= endGx; gx++) {
+          const sx = x + gx * 3;
+          const d = sx - Lx;
+          if (d < 0 || d > R) continue;
+
+          const p = Math.pow(1 - d / R, 1.7);
+          const isNearLine = d < 10;
+
+          for (let row = -5; row <= totalRows + 5; row++) {
+            let threshold;
+            if (row >= 0 && row <= totalRows) {
+              threshold = p * 0.92;
+            } else {
+              const rowDist = row < 0 ? -row : row - totalRows;
+              threshold = p * 0.16 * Math.max(0, 1 - rowDist / 5);
+            }
+
+            if (threshold <= 0) continue;
+
+            // Spatial hash
+            const h = hash3(gx, row, cardIndex);
+            if (h >= threshold) continue;
+
+            // Twinkle
+            if (!prefersReducedMotion) {
+              const tw = hash3(gx, row, twinkleTime);
+              if (tw < 0.22) continue;
+            }
+
+            // Color selection
+            const h2 = hash3(row, gx, cardIndex + 31);
+            let color;
+            if (isNearLine) {
+              const colorIdx = 4 + Math.floor(h2 * 3); // top 3 palest
+              color = PALETTE[Math.min(6, colorIdx)];
+            } else {
+              const colorIdx = Math.floor(h2 * h2 * 7); // mostly deep oranges
+              color = PALETTE[Math.min(6, colorIdx)];
+            }
+
+            // Size
+            const size = 1.1 + h2 * 1.7;
+
+            // Jitter
+            let jx = 0;
+            let jy = 0;
+            if (!prefersReducedMotion) {
+              jx = (hash3(gx, row, 11) - 0.5) * 1.6;
+              jy = (hash3(row, gx, 23) - 0.5) * 1.6;
+            }
+
+            ctx.fillStyle = color;
+            ctx.fillRect(sx + jx, cardTop + row * 3 + jy, size, size);
+          }
+        }
+      }
+
+      // ─── FREE SPARKS ───
+      function drawSparks(dt) {
+        // Spawn sparks
+        if (!prefersReducedMotion) {
+          for (let s = 0; s < 3; s++) {
+            if (Math.random() < 0.7) {
+              sparks.push({
+                x: Lx + Math.random() * 30,
+                y: cardTop - 10 + Math.random() * (ch + 20),
+                vx: -30 + Math.random() * 70 + vel * 0.6,
+                vy: (Math.random() - 0.5) * 50,
+                life: 0,
+                maxLife: 0.3 + Math.random() * 0.8,
+                size: 0.8 + Math.random() * 1.8,
+                color: PALETTE[Math.floor(Math.random() * PALETTE.length)]
+              });
+            }
+          }
+        }
+
+        // Update & Render
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const sp = sparks[i];
+          sp.life += dt;
+
+          if (sp.life >= sp.maxLife) {
+            sparks.splice(i, 1);
+            continue;
+          }
+
+          sp.x += sp.vx * dt;
+          sp.y += sp.vy * dt;
+
+          // Alpha fade
+          const alpha = Math.min(1, sp.life * 2.2) * Math.max(0, 1 - sp.life / sp.maxLife);
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = sp.color;
+          ctx.fillRect(sp.x, sp.y, sp.size, sp.size);
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // Start loop
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>

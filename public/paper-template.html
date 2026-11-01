@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Great+Vibes&family=Noto+Serif+Devanagari:wght@600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Noto+Serif+Tamil:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 600px;
+      height: 600px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    .parchment {
+      width: 100%;
+      height: 100%;
+      background: #FAF6ED;
+      background-image: 
+        radial-gradient(#E8DFC8 1px, transparent 1px),
+        linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(246,238,220,0.98) 100%);
+      background-size: 16px 16px, 100% 100%;
+      border: 3px double #C4A252;
+      border-radius: 16px;
+      box-shadow: 
+        0 0 0 1px #9D7B32,
+        0 15px 35px rgba(0,0,0,0.4),
+        inset 0 0 45px rgba(196,162,82,0.18);
+      padding: 32px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #2D2316;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid rgba(196,162,82,0.45);
+      padding-bottom: 14px;
+    }
+    .feather-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .feather {
+      font-size: 32px;
+    }
+    .invocation {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #8C6826;
+      letter-spacing: 0.05em;
+    }
+    .sub-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      color: #8C754A;
+      letter-spacing: 0.12em;
+      margin-top: 2px;
+    }
+    .date {
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
+      color: #8C6826;
+      background: rgba(212,175,55,0.14);
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(196,162,82,0.4);
+    }
+    .title-section {
+      margin: 12px 0 8px;
+    }
+    .title {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #231C13;
+    }
+    .subtitle {
+      font-family: 'Noto Serif Tamil', serif;
+      font-size: 15px;
+      color: #8C6826;
+      margin-top: 4px;
+      font-style: italic;
+    }
+    .prayer-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(196,162,82,0.25);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 8px 0;
+      background-image: repeating-linear-gradient(transparent, transparent 30px, rgba(196,162,82,0.2) 31px, rgba(196,162,82,0.2) 32px);
+      line-height: 32px;
+    }
+    .prayer-quote {
+      font-size: 18px;
+      font-style: italic;
+      color: #2D2316;
+    }
+    .prayer-tamil {
+      font-family: 'Noto Serif Tamil', serif;
+      font-size: 15px;
+      color: #614D28;
+      margin-top: 8px;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid rgba(196,162,82,0.45);
+      padding-top: 12px;
+    }
+    .hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: #7A6237;
+      font-style: italic;
+    }
+    .seal {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      color: #8C6826;
+      background: rgba(212,175,55,0.18);
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(196,162,82,0.45);
+    }
+  </style>
+</head>
+<body>
+  <div class="parchment">
+    <div class="header">
+      <div class="feather-group">
+        <span class="feather">🪶</span>
+        <div>
+          <div class="invocation">श्री कृष्णाय नमः</div>
+          <div class="sub-tag">SACRED PRAYER SLIP · ENGLISH / TANGLISH / தமிழ்</div>
+        </div>
+      </div>
+      <div class="date">✦ GITA WISDOM</div>
+    </div>
+
+    <div class="title-section">
+      <div class="title">Complete Surrender & Solace</div>
+      <div class="subtitle">முழுமையான சரணாகதி · Divine Sanctuary</div>
+    </div>
+
+    <div class="prayer-body">
+      <div class="prayer-quote">
+        "I release every worry, anxiety, and burden into Your divine embrace. In surrender, I discover true peace."
+      </div>
+      <div class="prayer-tamil">
+        "என் கவலைகளையும் அச்சங்களையும் உன்னிடம் சமர்ப்பிக்கிறேன், கண்ணா."
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="hint">
+        <span>🪷</span>
+        <span>Touch & Hold to Crumple · Release to Restore</span>
+      </div>
+      <div class="seal">
+        <span>✦</span>
+        <span>KRISHNA'S BLESSING</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
